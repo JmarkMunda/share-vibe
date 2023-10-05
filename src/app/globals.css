@@ -2,3 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+.glass_card {
+  @apply bg-white p-12 rounded-xl bg-opacity-60 backdrop-filter backdrop-blur-lg;
+}
+
+.description {
+  @apply text-gray-500 font-light;
+}
+
