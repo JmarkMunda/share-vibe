@@ -1,6 +1,6 @@
 "use client";
-import Button from "../../components/Button";
-import TextInput from "../../components/TextInput";
+import Button from "../../../components/Button";
+import TextInput from "../../../components/TextInput";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 

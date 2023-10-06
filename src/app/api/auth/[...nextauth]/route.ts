@@ -1,15 +1,20 @@
 import User from "@/models/user";
 import connectToDb from "@/utils/connectToDb";
 import NextAuth from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
+  pages: {
+    signIn: "/login",
+    signOut: "/login",
+  },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
       // You can do verification here and manage if you want to login the user or not.
@@ -52,6 +57,7 @@ const handler = NextAuth({
       return session;
     },
   },
-});
+};
 
+const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

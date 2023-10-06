@@ -1,10 +1,11 @@
-import Image from "next/image";
+import React from "react";
 
-export default function Home() {
+const Page = () => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h1>Share Vibbe</h1>
-    </main>
+    <div>
+      <h1 className="text-2xl">Get Started</h1>
+    </div>
   );
-}
+};
 
+export default Page;
