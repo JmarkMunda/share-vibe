@@ -5,7 +5,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { FcGoogle } from "react-icons/fc";
 
 export default function Login() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const handleLogin = () => {
     signIn("google", { callbackUrl: "/home" });
@@ -15,8 +15,6 @@ export default function Login() {
     if (!session) return;
     signOut();
   };
-
-  console.log("Session:", session);
 
   return (
     <div className="sm:w-1/4 w-auto glass_card">
@@ -40,7 +38,10 @@ export default function Login() {
           <p className="description text-center mx-4">or</p>
           <div className="bg-gray-300 h-[2px] w-full" />
         </div>
-        <Button variant="secondary" loading={false} onClick={handleLogin}>
+        <Button
+          variant="secondary"
+          loading={status === "loading"}
+          onClick={handleLogin}>
           <span className="mr-2">
             <FcGoogle />
           </span>

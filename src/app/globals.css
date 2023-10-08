@@ -10,3 +10,7 @@
   @apply text-gray-500 font-light;
 }
 
+.nav_links {
+  @apply text-lg mx-4;
+}
+
