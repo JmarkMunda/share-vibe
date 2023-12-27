@@ -8,7 +8,7 @@ export default function Login() {
   const { data: session, status } = useSession();
 
   const handleLogin = () => {
-    signIn("google", { callbackUrl: "/home" });
+    signIn("google", { callbackUrl: "/feed" });
   };
 
   const handleLogout = () => {

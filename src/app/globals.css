@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: x-large;
+}
+
+h2 {
+  font-size: larger;
+}
+
+h3 {
+  font-size: large;
+}
+
+p {
+  font-size: medium;
+}
+
 .glass_card {
   @apply bg-white p-12 rounded-xl bg-opacity-60 backdrop-filter backdrop-blur-lg;
 }
@@ -12,5 +32,17 @@
 
 .nav_links {
   @apply text-lg mx-4;
+}
+
+.flex_center {
+  @apply flex items-center justify-center;
+}
+
+.icon {
+  @apply w-6 h-6;
+}
+
+.active-link {
+  @apply bg-white text-yellow-300 font-bold;
 }
 

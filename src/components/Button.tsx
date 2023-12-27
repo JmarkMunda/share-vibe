@@ -28,13 +28,13 @@ export default function Button({
   return (
     <button
       className={`${baseStyle} ${btnVariant} ${disabledClass} ${className}`}
-      disabled={disabled}
+      disabled={disabled || loading}
       {...props}>
       {!loading ? (
         children
       ) : (
         <DotLoader
-          color="red"
+          color="yellow"
           loading={loading}
           size={20}
           aria-label="Loading Spinner"
