@@ -1,3 +1,3 @@
-** Share Vibe **
+**Share Vibe**
 
 ## This project is still ongoing...
