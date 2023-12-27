@@ -28,7 +28,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="h-screen w-60 py-10 bg-primary-100">
+    <aside className="h-max w-60 py-10 glass_card">
       {routes.map((route) => (
         <Link
           href={route.path}

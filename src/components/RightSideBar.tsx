@@ -3,7 +3,7 @@ import React from "react";
 
 const RightSideBar = () => {
   return (
-    <section className="border-l-2 border-gray-100 w-80 h-screen p-10">
+    <section className="glass_card w-72 h-screen p-10">
       <h3 className="my-4 uppercase">Friends</h3>
       {/* List */}
       <div className="flex items-center">

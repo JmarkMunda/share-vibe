@@ -1,4 +1,6 @@
 import React from "react";
+import { data } from "../../../../data";
+import Post from "./_components/Post";
 
 const getAllPosts = async () => {
   const res = await fetch("https://dummyjson.com/posts");
@@ -6,9 +8,15 @@ const getAllPosts = async () => {
 };
 
 const Feed = async () => {
-  const posts = await getAllPosts();
+  // const posts = await getAllPosts();
 
-  return <div className="flex-1">Feed</div>;
+  return (
+    <div className="flex-1">
+      {data.posts.map((item) => (
+        <Post />
+      ))}
+    </div>
+  );
 };
 
 export default Feed;

@@ -17,7 +17,7 @@ export default function Login() {
   };
 
   return (
-    <div className="sm:w-1/4 w-auto glass_card">
+    <div className="sm:w-1/4 w-auto glass_card p-8">
       <div className="flex flex-col ">
         <h1 className="text-4xl font-bold my-4">Login</h1>
         <div className="my-2">

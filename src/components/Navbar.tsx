@@ -12,7 +12,7 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <nav className="bg-primary-300 py-4 px-10">
+    <nav className="container bg-primary-300 py-4">
       <div className="flex items-center justify-between">
         <div className="flex_center">
           <h1 className="mr-2 font-bold">Logo</h1>
