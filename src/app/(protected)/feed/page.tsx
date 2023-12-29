@@ -13,7 +13,7 @@ const Feed = async () => {
   return (
     <div className="flex-1">
       {data.posts.map((item) => (
-        <Post />
+        <Post key={item.id} item={item} />
       ))}
     </div>
   );

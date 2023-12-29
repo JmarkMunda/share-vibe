@@ -1,12 +1,13 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment, FaShare } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
 
-const Post = () => {
+const Post = ({ item }) => {
   return (
-    <article className="p-8 my-8 glass_card rounded-xl">
+    <article className="flex flex-col p-8 my-8 glass_card rounded-xl">
       {/* Avatar */}
       <div className="flex justify-between">
         <div className="flex gap-4">
@@ -31,13 +32,9 @@ const Post = () => {
         </div>
       </div>
       {/* Post itself (caption only, image only , caption with photo) */}
-      <div className="my-4 w-full h-[350px]">
-        <p className="mb-2">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Culpa illo
-          beatae distinctio esse atque id consequuntur tempore. Obcaecati,
-          molestias eius!
-        </p>
-        <div className="relative w-full h-4/5">
+      <div className="flex flex-col my-4 w-full">
+        {item?.body && <p className="mb-2">{item.body}</p>}
+        <div className="relative w-full h-[300px]">
           <Image
             src="/img-post.jpg"
             alt="post-image"
@@ -46,20 +43,29 @@ const Post = () => {
           />
         </div>
       </div>
+      {/* Brief details (amount of reactions, comments, shares) */}
+      <div className="flex_evenly border-b-2 border-gray-100">
+        <p className="description">{item?.reactions} likes</p>
+        <button className="description">15 comments</button>
+        <p className="description">8 shares</p>
+      </div>
+
       {/* reactions, comments, share */}
-      <div className="flex_evenly ">
+      <div className="flex_evenly">
         <button className="flex_center gap-2 px-4 py-2 rounded-md hover:bg-primary-300">
           <span>
             <AiFillLike />
           </span>
           Like
         </button>
-        <button className="flex_center gap-2 px-4 py-2 rounded-md hover:bg-primary-300">
-          <span>
-            <FaComment />
-          </span>
-          Comment
-        </button>
+        <Link href={`/feed/${item?.id}`}>
+          <button className="flex_center gap-2 px-4 py-2 rounded-md hover:bg-primary-300">
+            <span>
+              <FaComment />
+            </span>
+            Comment
+          </button>
+        </Link>
         <button className="flex_center gap-2 px-4 py-2 rounded-md hover:bg-primary-300">
           <span>
             <FaShare />
