@@ -1,20 +1,31 @@
 import React from "react";
-import { data } from "../../../../data";
 import Post from "./_components/Post";
+import { headers } from "next/headers";
+import { IPostSchema } from "@/models/post";
 
 const getAllPosts = async () => {
-  const res = await fetch("https://dummyjson.com/posts");
-  const data = await res.json();
+  const headersList = headers();
+  const cookie = headersList.get("cookie")!;
+
+  const res = await fetch(`${process.env.BASE_URL}/api/posts`, {
+    method: "GET",
+    headers: { Cookie: cookie },
+    next: { tags: ["posts"] },
+  });
+  const { data } = await res.json();
+  return data;
 };
 
 const Feed = async () => {
-  // const posts = await getAllPosts();
+  const posts: IPostSchema[] = await getAllPosts();
 
   return (
     <div className="flex-1">
-      {data.posts.map((item) => (
-        <Post key={item.id} item={item} />
-      ))}
+      {posts?.length > 0 ? (
+        posts.map((item) => <Post key={item._id} item={item} />)
+      ) : (
+        <p>No posts</p>
+      )}
     </div>
   );
 };

@@ -1,11 +1,17 @@
+import { IPostSchema } from "@/models/post";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment, FaShare } from "react-icons/fa";
 import { HiDotsVertical } from "react-icons/hi";
+import moment from "moment";
 
-const Post = ({ item }) => {
+interface IPost {
+  item: IPostSchema;
+}
+
+const Post = ({ item }: IPost) => {
   return (
     <article className="flex flex-col p-8 my-8 glass_card rounded-xl">
       {/* Avatar */}
@@ -13,7 +19,7 @@ const Post = ({ item }) => {
         <div className="flex gap-4">
           <button>
             <Image
-              src="/avatar.png"
+              src={item.author?.image ?? "/avatar.png"}
               alt="avatar"
               width={50}
               height={50}
@@ -21,8 +27,8 @@ const Post = ({ item }) => {
             />
           </button>
           <div>
-            <p className="font-bold">John Doe</p>
-            <p className="description">12 minutes ago</p>
+            <p className="font-bold">{item.author?.username}</p>
+            <p className="description">{moment(item.createdAt).fromNow()}</p>
           </div>
         </div>
         <div>
@@ -34,18 +40,20 @@ const Post = ({ item }) => {
       {/* Post itself (caption only, image only , caption with photo) */}
       <div className="flex flex-col my-4 w-full">
         {item?.body && <p className="mb-2">{item.body}</p>}
-        <div className="relative w-full h-[300px]">
-          <Image
-            src="/img-post.jpg"
-            alt="post-image"
-            fill
-            className="object-cover rounded-2xl"
-          />
-        </div>
+        {item?.image && (
+          <div className="relative w-full h-[300px]">
+            <Image
+              src={item.image}
+              alt="post-image"
+              fill
+              className="object-cover rounded-2xl"
+            />
+          </div>
+        )}
       </div>
       {/* Brief details (amount of reactions, comments, shares) */}
       <div className="flex_evenly border-b-2 border-gray-100">
-        <p className="description">{item?.reactions} likes</p>
+        <p className="description">4 likes</p>
         <button className="description">15 comments</button>
         <p className="description">8 shares</p>
       </div>

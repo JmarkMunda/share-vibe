@@ -1,10 +1,24 @@
-import mongoose, { Schema, models } from "mongoose";
+import mongoose, { Document, Model, Schema, models } from "mongoose";
+import { IUserSchema } from "./user";
 
-const postSchema = new Schema({
-  body: String,
-  author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-});
+export interface IPostSchema extends Document {
+  body: string;
+  author: IUserSchema;
+  image?: string;
+  createdAt?: Date;
+  upadtedAt?: Date;
+}
 
-const Post = models.Post || mongoose.model("Post", postSchema);
+const postSchema = new Schema<IPostSchema>(
+  {
+    body: String,
+    author: { type: Schema.Types.ObjectId, ref: "User" },
+    image: String,
+  },
+  { timestamps: true }
+);
+
+const Post: Model<IPostSchema> =
+  models.Post || mongoose.model("Post", postSchema);
 
 export default Post;

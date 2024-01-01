@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { withUt } from "uploadthing/tw";
 
 const config: Config = {
   content: [
@@ -41,6 +42,17 @@ const config: Config = {
     },
   },
   plugins: [require("daisyui")],
+  daisyui: {
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+          primary: "#fff878",
+          secondary: "teal",
+        },
+      },
+    ],
+  },
 };
-export default config;
+export default withUt(config);
 
