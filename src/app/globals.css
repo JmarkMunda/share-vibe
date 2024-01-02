@@ -48,7 +48,7 @@ p {
 }
 
 .glass_card {
-  @apply bg-white rounded-xl bg-opacity-80 backdrop-filter backdrop-blur-lg;
+  @apply bg-white rounded-2xl bg-opacity-80 backdrop-filter backdrop-blur-lg;
 }
 
 .description {

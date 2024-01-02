@@ -24,6 +24,16 @@ export async function createPost(
   }
 }
 
+export async function deletePost(id: string) {
+  try {
+    await connectToDb();
+    await Post.findByIdAndDelete(id);
+    revalidateTag("posts");
+  } catch (error) {
+    console.log("Error deleting post: ", error);
+  }
+}
+
 export async function deleteUploadedImage(files: string[]) {
   const utapi = new UTApi();
   await utapi.deleteFiles(files);

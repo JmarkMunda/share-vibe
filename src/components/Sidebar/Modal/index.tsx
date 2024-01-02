@@ -53,8 +53,6 @@ const Modal = ({ show, setShow }: IModal) => {
     resetModal();
   };
 
-  // TODO: Style upload button
-
   return (
     <dialog className={`modal modal-${show ? "open" : "close"}`}>
       <div className="modal-box">
@@ -98,9 +96,15 @@ const Modal = ({ show, setShow }: IModal) => {
           )}
 
           <div className="flex_between">
-            {/* <IoImageOutline /> */}
+            {/* <IoImageOutline className="w-8 h-8 text-blue-500" />; */}
             <UploadButton
               endpoint="imageUploader"
+              content={{
+                button({ ready }) {
+                  if (ready)
+                    return <IoImageOutline className="w-8 h-8 text-blue-500" />;
+                },
+              }}
               onUploadProgress={() => {
                 setLoading((prev) => ({ ...prev, isUploading: true }));
               }}
@@ -112,11 +116,12 @@ const Modal = ({ show, setShow }: IModal) => {
                 toast.error("Failed to upload image");
                 setLoading((prev) => ({ ...prev, isUploading: false }));
               }}
+              className="ut-allowed-content:hidden ut-button:w-max ut-button:p-4 ut-button:bg-transparent"
             />
 
             <button
               type="submit"
-              className="btn btn-primary self-end font-bold"
+              className="btn btn-primary self-end font-extrabold"
               disabled={loading.isPosting || loading.isUploading}>
               {loading.isPosting ? (
                 <span className="loading loading-spinner text-warning" />
