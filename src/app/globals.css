@@ -2,6 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #ebeae4;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #fff9ab;
+    border-radius: 100vh;
+    border: 1px solid #f6f7ed;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #fbf69d;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -22,8 +43,12 @@ p {
   font-size: medium;
 }
 
+.container {
+  @apply relative max-w-screen-xl mx-auto;
+}
+
 .glass_card {
-  @apply bg-white p-12 rounded-xl bg-opacity-60 backdrop-filter backdrop-blur-lg;
+  @apply bg-white rounded-2xl bg-opacity-80 backdrop-filter backdrop-blur-lg;
 }
 
 .description {
@@ -34,8 +59,20 @@ p {
   @apply text-lg mx-4;
 }
 
+.flex_col {
+  @apply flex flex-col;
+}
+
 .flex_center {
   @apply flex items-center justify-center;
+}
+
+.flex_between {
+  @apply flex items-center justify-between;
+}
+
+.flex_evenly {
+  @apply flex items-center justify-evenly;
 }
 
 .icon {
@@ -43,6 +80,6 @@ p {
 }
 
 .active-link {
-  @apply bg-white text-yellow-300 font-bold;
+  @apply bg-primary-300 font-bold border-l-4 border-primary-500;
 }
 
