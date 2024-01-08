@@ -27,7 +27,9 @@ export default function Button({
 
   return (
     <button
-      className={`${baseStyle} ${btnVariant} ${disabledClass} ${className}`}
+      className={`${baseStyle} ${
+        !disabled ? btnVariant : disabledClass
+      } ${className}`}
       disabled={disabled || loading}
       {...props}>
       {!loading ? (

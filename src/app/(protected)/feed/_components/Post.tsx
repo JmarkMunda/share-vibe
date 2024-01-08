@@ -49,21 +49,22 @@ const Post = ({ item }: IPost) => {
             </div>
           </div>
           {/* MENU OPTIONS */}
-          <div>
-            <button className="dropdown dropdown-end">
+
+          <div className="dropdown dropdown-left">
+            <button>
               <HiDotsVertical />
-              <ul className="menu menu-sm dropdown-content bg-white shadow w-56 rounded-box z-50">
-                <li>
-                  <a>Edit</a>
-                </li>
-                <li>
-                  <button onClick={() => setShowMenu(true)}>Delete</button>
-                </li>
-                <li>
-                  <a>Report</a>
-                </li>
-              </ul>
             </button>
+            <ul className="menu menu-sm dropdown-content bg-white shadow w-56 rounded-box z-50">
+              <li>
+                <a>Edit</a>
+              </li>
+              <li>
+                <button onClick={() => setShowMenu(true)}>Delete</button>
+              </li>
+              <li>
+                <a>Report</a>
+              </li>
+            </ul>
           </div>
         </div>
         {/* Post itself (caption only, image only , caption with photo) */}

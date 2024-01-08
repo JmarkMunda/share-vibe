@@ -2,12 +2,11 @@
 import { createPost, deleteUploadedImage } from "@/app/actions";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { RefObject, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { IoImageOutline } from "react-icons/io5";
 import { UploadButton } from "@/utils/uploadthings";
 import { UploadFileResponse } from "uploadthing/client";
-import { IPostSchema } from "@/models/post";
 
 interface IModal {
   show: boolean;
@@ -66,9 +65,7 @@ const Modal = ({ show, setShow }: IModal) => {
           />
           <div className="leading-5">
             <p className="font-bold">{session?.user?.name}</p>
-            <p className="description">
-              @{session?.user?.name?.replace(" ", "").toLowerCase()}
-            </p>
+            <p className="description">@{session?.user?.username}</p>
           </div>
         </div>
 
