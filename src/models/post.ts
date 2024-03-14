@@ -4,7 +4,7 @@ import { IUserSchema } from "./user";
 export interface IPostSchema extends Document {
   body: string;
   author: IUserSchema;
-  image?: string;
+  images?: string[];
   createdAt?: Date;
   upadtedAt?: Date;
 }
@@ -13,7 +13,7 @@ const postSchema = new Schema<IPostSchema>(
   {
     body: String,
     author: { type: Schema.Types.ObjectId, ref: "User" },
-    image: String,
+    images: [String],
   },
   { timestamps: true }
 );

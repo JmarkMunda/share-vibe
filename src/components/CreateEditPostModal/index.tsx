@@ -2,26 +2,48 @@
 import { createPost, deleteUploadedImage } from "@/app/actions";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import React, { FormEvent, FormEventHandler, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { IoImageOutline } from "react-icons/io5";
 import { UploadButton } from "@/utils/uploadthings";
+// import UploadButton from "./UploadButton";
 import { UploadFileResponse } from "uploadthing/client";
+import { IPostSchema } from "@/models/post";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { ICreateEditPostModal, InputsType } from "./types";
+import { useUploadThing } from "@/utils/uploadthings";
 
-interface IModal {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Modal = ({ show, setShow }: IModal) => {
+const CreateEditPostModal = ({
+  show,
+  setShow,
+  editValues,
+}: ICreateEditPostModal) => {
+  // SESSION
   const { data: session } = useSession();
+  // FORM REF
   const ref = useRef<HTMLFormElement | null>(null);
-  const [files, setFiles] = useState<
-    UploadFileResponse<{ uploadedBy: string }>[]
-  >([]);
+  // LOADING
   const [loading, setLoading] = useState({
     isPosting: false,
     isUploading: false,
+  });
+  // UPLOAD
+  const [text, setText] = useState("");
+  const [files, setFiles] = useState<
+    UploadFileResponse<{
+      uploadedBy: string;
+    }>[]
+  >([]);
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
+    onClientUploadComplete: () => {
+      alert("uploaded successfully!");
+    },
+    onUploadError: () => {
+      alert("error occurred while uploading");
+    },
+    onUploadBegin: () => {
+      alert("upload has begun");
+    },
   });
 
   const resetModal = () => {
@@ -29,21 +51,31 @@ const Modal = ({ show, setShow }: IModal) => {
     setShow(false);
   };
 
-  const handleCreatePost = async (formData: FormData) => {
-    setLoading((prev) => ({ ...prev, isPosting: true }));
-    const data = {
-      body: formData.get("body")!.toString(),
-      image: files[0]?.url,
-    };
-    const res = createPost(data, session);
-    await toast.promise(res, {
-      loading: "Loading",
-      success: "Successfully created a post",
-      error: "Failed to create a post",
-    });
-    setLoading((prev) => ({ ...prev, isPosting: false }));
-    resetModal();
-    ref.current?.reset();
+  // TODO: Fix uploading image using uploadthing (DONE)
+  // TODO: clean the code
+  // TODO: push this code remotely to track changes
+
+  const handleCreatePost = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      setLoading((prev) => ({ ...prev, isPosting: true }));
+      const fileUrls = files.map((file) => file.url);
+      const data = {
+        body: text,
+        images: fileUrls,
+      };
+      const res = createPost(data, session);
+      await toast.promise(res, {
+        loading: "Loading",
+        success: "Successfully created a post",
+        error: "Failed to create a post",
+      });
+      setLoading((prev) => ({ ...prev, isPosting: false }));
+      resetModal();
+      ref.current?.reset();
+    } catch (error) {
+      console.log("Error creating a post", error);
+    }
   };
 
   const handleModalClose = async () => {
@@ -69,14 +101,15 @@ const Modal = ({ show, setShow }: IModal) => {
           </div>
         </div>
 
-        <form ref={ref} action={handleCreatePost}>
+        <form ref={ref} onSubmit={handleCreatePost}>
           {/* TEXT AREA */}
           <textarea
-            name="body"
+            onChange={(e) => setText(e.currentTarget.value)}
             className="my-4 textarea w-full border-0 active:outline-none"
-            placeholder="What's on your mind?"></textarea>
-
+            placeholder="What's on your mind?"
+          />
           {/* IMAGES */}
+          {/* TODO: Fix this */}
           {!!files.length && (
             <div className="flex gap-4 py-4">
               {files.map((file) => (
@@ -91,8 +124,9 @@ const Modal = ({ show, setShow }: IModal) => {
               ))}
             </div>
           )}
-
+          {/* UPLOAD IMAGE BUTTON */}
           <div className="flex_between">
+            {/* <UploadButton register={register} /> */}
             {/* <IoImageOutline className="w-8 h-8 text-blue-500" />; */}
             <UploadButton
               endpoint="imageUploader"
@@ -106,6 +140,7 @@ const Modal = ({ show, setShow }: IModal) => {
                 setLoading((prev) => ({ ...prev, isUploading: true }));
               }}
               onClientUploadComplete={(res) => {
+                console.log("CLIEND UPLOAD COMPLETE: ", res);
                 setFiles((prev) => [...prev, ...res]);
                 setLoading((prev) => ({ ...prev, isUploading: false }));
               }}
@@ -115,7 +150,6 @@ const Modal = ({ show, setShow }: IModal) => {
               }}
               className="ut-allowed-content:hidden ut-button:w-max ut-button:p-4 ut-button:bg-transparent"
             />
-
             <button
               type="submit"
               className="btn btn-primary self-end font-extrabold"
@@ -136,4 +170,4 @@ const Modal = ({ show, setShow }: IModal) => {
   );
 };
 
-export default Modal;
+export default CreateEditPostModal;

@@ -10,6 +10,7 @@ import moment from "moment";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { deletePost } from "@/app/actions";
 import toast from "react-hot-toast";
+import CreateEditPostModal from "@/components/CreateEditPostModal";
 
 interface IPost {
   item: IPostSchema;
@@ -17,6 +18,15 @@ interface IPost {
 
 const Post = ({ item }: IPost) => {
   const [showMenu, setShowMenu] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
+  const onEditPress = () => {
+    setShowEditModal(true);
+  };
+
+  const onDeletePress = () => {
+    setShowMenu(true);
+  };
 
   const handleDeletePost = async () => {
     const res = deletePost(item._id);
@@ -56,10 +66,10 @@ const Post = ({ item }: IPost) => {
             </button>
             <ul className="menu menu-sm dropdown-content bg-white shadow w-56 rounded-box z-50">
               <li>
-                <a>Edit</a>
+                <button onClick={onEditPress}>Edit</button>
               </li>
               <li>
-                <button onClick={() => setShowMenu(true)}>Delete</button>
+                <button onClick={onDeletePress}>Delete</button>
               </li>
               <li>
                 <a>Report</a>
@@ -68,16 +78,24 @@ const Post = ({ item }: IPost) => {
           </div>
         </div>
         {/* Post itself (caption only, image only , caption with photo) */}
-        <div className="flex flex-col my-4 w-full">
+        <div className="flex flex-col mt-4 mb-8 w-full">
           {item?.body && <p className="mb-2">{item.body}</p>}
-          {item?.image && (
-            <div className="relative w-full h-[300px]">
+
+          {/* IMAGES */}
+          {!!item?.images?.length && (
+            <div className="relative mx-2 w-[600px] h-[300px] bg-white">
               <Image
-                src={item.image}
+                src={item?.images[0]}
                 alt="post-image"
                 fill
-                className="object-cover rounded-2xl"
+                className="object-contain rounded-2xl"
               />
+
+              {item.images?.length > 1 && (
+                <div className="bg-gray-300 w-16 h-16 absolute bottom-2 right-2 flex_center">
+                  <p className="text-white">{item.images?.length}</p>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -122,6 +140,11 @@ const Post = ({ item }: IPost) => {
         handleCancel={() => setShowMenu(false)}
         confirmText="Delete"
         btnConfirmClassNames="bg-red-500 text-white"
+      />
+      <CreateEditPostModal
+        show={showEditModal}
+        setShow={setShowEditModal}
+        editValues={item}
       />
     </>
   );

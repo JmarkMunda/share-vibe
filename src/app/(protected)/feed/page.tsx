@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "./_components/Post";
+import Post from "./_components/Post/Post";
 import { headers } from "next/headers";
 import { IPostSchema } from "@/models/post";
 

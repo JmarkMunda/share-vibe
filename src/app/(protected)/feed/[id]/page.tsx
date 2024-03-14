@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "../_components/Post";
+import Post from "../_components/Post/Post";
 
 interface IPost {
   params: { id: string };
