@@ -16,11 +16,22 @@ export async function createPost(data: InputsType, session: Session | null) {
       ...data,
       author: user._id,
     });
-
     revalidateTag("posts");
     console.log("Post created successfully", res);
   } catch (error) {
+    Promise.reject(error);
     console.log("Error creating post: ", error);
+  }
+}
+
+export async function editPost(id: string, data: InputsType) {
+  try {
+    await connectToDb();
+    await Post.findByIdAndUpdate(id, data);
+    revalidateTag("posts");
+  } catch (error) {
+    Promise.reject(error);
+    console.log("Error editing post:", error);
   }
 }
 
@@ -30,6 +41,7 @@ export async function deletePost(id: string) {
     await Post.findByIdAndDelete(id);
     revalidateTag("posts");
   } catch (error) {
+    Promise.reject(error);
     console.log("Error deleting post: ", error);
   }
 }
@@ -52,6 +64,7 @@ export async function register(data: IUserSchema) {
     const response = await res.json();
     return response;
   } catch (error: any) {
+    Promise.reject(error);
     console.log("[ACTION] Registration error:", error);
   }
 }

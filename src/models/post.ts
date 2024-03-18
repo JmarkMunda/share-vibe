@@ -1,10 +1,11 @@
 import mongoose, { Document, Model, Schema, models } from "mongoose";
 import { IUserSchema } from "./user";
+import { ImageType } from "@/components/CreateEditPostModal/types";
 
 export interface IPostSchema extends Document {
   body: string;
   author: IUserSchema;
-  images?: string[];
+  images?: ImageType[];
   createdAt?: Date;
   upadtedAt?: Date;
 }
@@ -13,7 +14,7 @@ const postSchema = new Schema<IPostSchema>(
   {
     body: String,
     author: { type: Schema.Types.ObjectId, ref: "User" },
-    images: [String],
+    images: [Schema.Types.Mixed],
   },
   { timestamps: true }
 );

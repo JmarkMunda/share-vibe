@@ -83,17 +83,18 @@ const Post = ({ item }: IPost) => {
 
           {/* IMAGES */}
           {!!item?.images?.length && (
-            <div className="relative mx-2 w-[600px] h-[300px] bg-white">
+            <div className="relative bg-gray-300 rounded-2xl w-full h-[300px]">
               <Image
-                src={item?.images[0]}
+                src={item?.images[0].url}
                 alt="post-image"
                 fill
-                className="object-contain rounded-2xl"
+                sizes="(max-width: 768px) 100vw"
+                className="object-cover rounded-2xl"
               />
 
               {item.images?.length > 1 && (
                 <div className="bg-gray-300 w-16 h-16 absolute bottom-2 right-2 flex_center">
-                  <p className="text-white">{item.images?.length}</p>
+                  <p className="text-white">{item.images?.length - 1}</p>
                 </div>
               )}
             </div>
