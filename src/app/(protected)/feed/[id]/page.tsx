@@ -9,7 +9,7 @@ const PostPage = ({ params }: IPost) => {
   return (
     <div>
       Post {params.id}
-      <Post />
+      {/* <Post /> */}
     </div>
   );
 };

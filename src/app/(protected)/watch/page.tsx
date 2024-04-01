@@ -1,8 +1,6 @@
 import React from "react";
 
-const Watch = ({ params }) => {
-  console.log(params);
-
+const Watch = () => {
   return (
     <div className="flex-1">
       <p>Watch</p>
