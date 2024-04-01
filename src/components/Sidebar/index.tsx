@@ -13,7 +13,7 @@ const Sidebar = () => {
 
   const routes = [
     {
-      path: "/feed",
+      path: "/",
       label: "Feed",
       icon: <CgFeed className="icon" />,
     },

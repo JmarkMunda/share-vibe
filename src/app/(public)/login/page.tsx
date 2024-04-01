@@ -17,7 +17,7 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     setLoading((prev) => ({ ...prev, isGoogleLoading: true }));
-    await signIn("google", { callbackUrl: "/feed" });
+    await signIn("google", { callbackUrl: "/" });
     setLoading((prev) => ({ ...prev, isGoogleLoading: false }));
   };
 
@@ -39,7 +39,7 @@ export default function Login() {
     if (!res?.ok) {
       return toast.error("Please check your credentials and try again");
     }
-    router.replace("/feed");
+    router.replace("/");
   };
 
   return (

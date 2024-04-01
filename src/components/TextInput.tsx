@@ -2,8 +2,8 @@ import React, { ChangeEvent, InputHTMLAttributes } from "react";
 
 interface ITextInput extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   hasError?: boolean;
 }
 
