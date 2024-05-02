@@ -10,10 +10,11 @@ import Link from "next/link";
 import TextField from "./components/TextField";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { registerSchema } from "@/utils/clientSchemas";
+import { useRouter } from "next/navigation";
+import { FormValuesType } from "./types";
 
 const RegisterPage = () => {
   const [isAgree, setIsAgree] = useState(false);
-
   const { control, handleSubmit, formState } = useForm<FormValuesType>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -21,20 +22,17 @@ const RegisterPage = () => {
       email: "",
       username: "",
       password: "",
-      image:
-        "https://lh3.googleusercontent.com/a/ACg8ocJkKq_NqCUhC61_dNvvh323yJOM96q0y6XgfbFc42ssr1s=s96-c",
+      image: "https://utfs.io/f/79b6bc95-8e20-49fe-b9b1-7b2da3a4dcaf-2558r.png",
     },
   });
+  const router = useRouter();
 
   const handleRegister = async (data: FormValuesType) => {
-    if (data) {
-      console.log(data);
-      return;
-    }
-    const res = await register(data);
+    const { confirmPassword, ...rest } = data;
+    const res = await register(rest);
     if (res.statusCode) {
       toast.success(res.message);
-      redirect("/login");
+      router.replace("/login");
     } else {
       toast.error(res.message);
     }
@@ -91,11 +89,13 @@ const RegisterPage = () => {
               control={control}
               name="password"
               placeholder="Password"
+              type="password"
             />
             <TextField
               control={control}
               name="confirmPassword"
               placeholder="Confirm Password"
+              type="password"
             />
           </div>
           {/* TERMS AND CONDITIONS */}
@@ -113,11 +113,13 @@ const RegisterPage = () => {
 
           <Button
             variant="primary"
-            loading={false}
+            loading={formState.isSubmitting}
             type="submit"
             className="mt-2"
             onClick={handleSubmit(handleRegister)}
-            disabled={!formState.isValid}>
+            disabled={
+              (!isAgree && !formState.isValid) || formState.isSubmitting
+            }>
             Register
           </Button>
         </form>

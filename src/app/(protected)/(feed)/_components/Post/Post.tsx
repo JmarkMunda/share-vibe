@@ -1,32 +1,46 @@
 "use client";
-import { IPostSchema } from "@/models/post";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
 import { AiFillLike } from "react-icons/ai";
 import { FaComment, FaShare } from "react-icons/fa";
-import { HiDotsVertical } from "react-icons/hi";
+import { deletePost } from "@/app/actions";
+import { IPost } from "./types";
 import moment from "moment";
 import ConfirmationModal from "@/components/ConfirmationModal";
-import { deletePost } from "@/app/actions";
 import toast from "react-hot-toast";
 import CreateEditPostModal from "@/components/CreateEditPostModal";
-
-interface IPost {
-  item: IPostSchema;
-}
+import Menu from "@/components/Menu";
+import Avatar from "@/components/Avatar";
 
 const Post = ({ item }: IPost) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const onEditPress = () => {
+  const onEditClick = () => {
     setShowEditModal(true);
   };
 
-  const onDeletePress = () => {
+  const onDeleteClick = () => {
     setShowMenu(true);
   };
+
+  const onReportClick = () => {};
+
+  const menuItems: MenuItemsType[] = [
+    {
+      label: "Edit",
+      onClick: onEditClick,
+    },
+    {
+      label: "Delete",
+      onClick: onDeleteClick,
+    },
+    {
+      label: "Report",
+      onClick: onReportClick,
+    },
+  ];
 
   const handleDeletePost = async () => {
     const res = deletePost(item._id);
@@ -45,13 +59,7 @@ const Post = ({ item }: IPost) => {
         <div className="flex justify-between">
           <div className="flex gap-4">
             <button>
-              <Image
-                src={item.author?.image ?? "/avatar.png"}
-                alt="avatar"
-                width={50}
-                height={50}
-                className="rounded-full "
-              />
+              <Avatar src={item.author?.image} />
             </button>
             <div>
               <p className="font-bold">{item.author?.username}</p>
@@ -59,23 +67,7 @@ const Post = ({ item }: IPost) => {
             </div>
           </div>
           {/* MENU OPTIONS */}
-
-          <div className="dropdown dropdown-left">
-            <button>
-              <HiDotsVertical />
-            </button>
-            <ul className="menu menu-sm dropdown-content bg-white shadow w-56 rounded-box z-50">
-              <li>
-                <button onClick={onEditPress}>Edit</button>
-              </li>
-              <li>
-                <button onClick={onDeletePress}>Delete</button>
-              </li>
-              <li>
-                <a>Report</a>
-              </li>
-            </ul>
-          </div>
+          <Menu items={menuItems} />
         </div>
         {/* Post itself (caption only, image only , caption with photo) */}
         <div className="flex flex-col mt-4 mb-8 w-full">

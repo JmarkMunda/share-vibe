@@ -1,8 +1,9 @@
 import React from "react";
 import TextInput from "@/components/TextInput";
 import { useController } from "react-hook-form";
+import { ITextField } from "../types";
 
-const TextField = ({ name, control, placeholder }: ITextField) => {
+const TextField = ({ name, control, placeholder, ...props }: ITextField) => {
   const { field, fieldState } = useController({
     name,
     control,
@@ -14,6 +15,7 @@ const TextField = ({ name, control, placeholder }: ITextField) => {
       onChange={field.onChange}
       placeholder={placeholder}
       hasError={!!fieldState.error?.message}
+      {...props}
     />
   );
 };
