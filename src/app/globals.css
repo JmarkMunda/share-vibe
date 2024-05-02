@@ -83,3 +83,7 @@ p {
   @apply bg-primary-300 font-bold border-l-4 border-primary-500;
 }
 
+.fancy_border_radius_1 {
+  border-radius: 22% 78% 52% 48% / 54% 34% 66% 46%;
+}
+

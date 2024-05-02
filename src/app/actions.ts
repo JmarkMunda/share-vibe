@@ -1,4 +1,5 @@
 "use server";
+import { InputsType } from "@/components/CreateEditPostModal/types";
 import Post, { IPostSchema } from "@/models/post";
 import User, { IUserSchema } from "@/models/user";
 import connectToDb from "@/utils/connectToDb";
@@ -7,21 +8,30 @@ import { signIn } from "next-auth/react";
 import { revalidateTag } from "next/cache";
 import { UTApi } from "uploadthing/server";
 
-export async function createPost(
-  data: { body: string; image: string | null },
-  session: Session | null
-) {
+export async function createPost(data: InputsType, session: Session | null) {
   await connectToDb();
   try {
     const user = await User.findOne({ email: session?.user?.email });
-    await Post.create({
+    const res = await Post.create({
       ...data,
       author: user._id,
     });
+    revalidateTag("posts");
+    console.log("Post created successfully", res);
+  } catch (error) {
+    Promise.reject(error);
+    console.log("Error creating post: ", error);
+  }
+}
 
+export async function editPost(id: string, data: InputsType) {
+  try {
+    await connectToDb();
+    await Post.findByIdAndUpdate(id, data);
     revalidateTag("posts");
   } catch (error) {
-    console.log("Error creating post: ", error);
+    Promise.reject(error);
+    console.log("Error editing post:", error);
   }
 }
 
@@ -31,6 +41,7 @@ export async function deletePost(id: string) {
     await Post.findByIdAndDelete(id);
     revalidateTag("posts");
   } catch (error) {
+    Promise.reject(error);
     console.log("Error deleting post: ", error);
   }
 }
@@ -53,6 +64,7 @@ export async function register(data: IUserSchema) {
     const response = await res.json();
     return response;
   } catch (error: any) {
+    Promise.reject(error);
     console.log("[ACTION] Registration error:", error);
   }
 }

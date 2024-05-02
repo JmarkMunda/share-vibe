@@ -5,7 +5,7 @@ import { CgFeed } from "react-icons/cg";
 import { FiUsers } from "react-icons/fi";
 import { LuMonitorPlay } from "react-icons/lu";
 import { usePathname } from "next/navigation";
-import Modal from "./Modal";
+import CreateEditPostModal from "../CreateEditPostModal";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -13,7 +13,7 @@ const Sidebar = () => {
 
   const routes = [
     {
-      path: "/feed",
+      path: "/",
       label: "Feed",
       icon: <CgFeed className="icon" />,
     },
@@ -51,8 +51,19 @@ const Sidebar = () => {
         Create Post
       </button>
 
+      <Link
+        href={{
+          pathname: "/watch",
+          query: { name: "Jm", body: "Sample body", image: "avatar.png" },
+        }}>
+        Trying out search params
+      </Link>
+
       {/* Modal */}
-      <Modal show={createPostModal} setShow={setCreatePostModal} />
+      <CreateEditPostModal
+        show={createPostModal}
+        setShow={setCreatePostModal}
+      />
     </aside>
   );
 };

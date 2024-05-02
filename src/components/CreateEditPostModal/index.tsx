@@ -1,56 +1,33 @@
 "use client";
-import { createPost, deleteUploadedImage } from "@/app/actions";
-import { useSession } from "next-auth/react";
+import React from "react";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { IoImageOutline } from "react-icons/io5";
 import { UploadButton } from "@/utils/uploadthings";
-import { UploadFileResponse } from "uploadthing/client";
+import { ICreateEditPostModal } from "./types";
+import useCreateEditPost from "./hooks/useCreatePost";
 
-interface IModal {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Modal = ({ show, setShow }: IModal) => {
-  const { data: session } = useSession();
-  const ref = useRef<HTMLFormElement | null>(null);
-  const [files, setFiles] = useState<
-    UploadFileResponse<{ uploadedBy: string }>[]
-  >([]);
-  const [loading, setLoading] = useState({
-    isPosting: false,
-    isUploading: false,
+const CreateEditPostModal = ({
+  show,
+  setShow,
+  editValues,
+}: ICreateEditPostModal) => {
+  const {
+    session,
+    text,
+    images,
+    invalid,
+    loading,
+    setLoading,
+    handleOnChange,
+    handleAddImages,
+    handleModalClose,
+    handlePost,
+    getButtonLabel,
+  } = useCreateEditPost({
+    editValues,
+    setShow,
   });
-
-  const resetModal = () => {
-    setFiles([]);
-    setShow(false);
-  };
-
-  const handleCreatePost = async (formData: FormData) => {
-    setLoading((prev) => ({ ...prev, isPosting: true }));
-    const data = {
-      body: formData.get("body")!.toString(),
-      image: files[0]?.url,
-    };
-    const res = createPost(data, session);
-    await toast.promise(res, {
-      loading: "Loading",
-      success: "Successfully created a post",
-      error: "Failed to create a post",
-    });
-    setLoading((prev) => ({ ...prev, isPosting: false }));
-    resetModal();
-    ref.current?.reset();
-  };
-
-  const handleModalClose = async () => {
-    const fileKeys = files.map((file) => file.key);
-    if (!!fileKeys.length) await deleteUploadedImage(fileKeys);
-    resetModal();
-  };
 
   return (
     <dialog className={`modal modal-${show ? "open" : "close"}`}>
@@ -69,21 +46,23 @@ const Modal = ({ show, setShow }: IModal) => {
           </div>
         </div>
 
-        <form ref={ref} action={handleCreatePost}>
+        <form onSubmit={handlePost}>
           {/* TEXT AREA */}
           <textarea
-            name="body"
+            value={text}
+            onChange={handleOnChange}
             className="my-4 textarea w-full border-0 active:outline-none"
-            placeholder="What's on your mind?"></textarea>
-
+            placeholder="What's on your mind?"
+          />
           {/* IMAGES */}
-          {!!files.length && (
+          {/* TODO: Fix this */}
+          {!!images.length && (
             <div className="flex gap-4 py-4">
-              {files.map((file) => (
+              {images.map((image, index) => (
                 <Image
-                  key={file.key}
-                  src={file.url}
-                  alt={file.name}
+                  key={image.key}
+                  src={image.url}
+                  alt={`image-${index}`}
                   width={100}
                   height={100}
                   className="shadow-md rounded-md"
@@ -91,9 +70,8 @@ const Modal = ({ show, setShow }: IModal) => {
               ))}
             </div>
           )}
-
+          {/* UPLOAD IMAGE BUTTON */}
           <div className="flex_between">
-            {/* <IoImageOutline className="w-8 h-8 text-blue-500" />; */}
             <UploadButton
               endpoint="imageUploader"
               content={{
@@ -106,7 +84,7 @@ const Modal = ({ show, setShow }: IModal) => {
                 setLoading((prev) => ({ ...prev, isUploading: true }));
               }}
               onClientUploadComplete={(res) => {
-                setFiles((prev) => [...prev, ...res]);
+                handleAddImages({ key: res[0].key, url: res[0].url });
                 setLoading((prev) => ({ ...prev, isUploading: false }));
               }}
               onUploadError={(err: Error) => {
@@ -115,15 +93,14 @@ const Modal = ({ show, setShow }: IModal) => {
               }}
               className="ut-allowed-content:hidden ut-button:w-max ut-button:p-4 ut-button:bg-transparent"
             />
-
             <button
               type="submit"
               className="btn btn-primary self-end font-extrabold"
-              disabled={loading.isPosting || loading.isUploading}>
+              disabled={invalid || loading.isPosting || loading.isUploading}>
               {loading.isPosting ? (
                 <span className="loading loading-spinner text-warning" />
               ) : (
-                "Post"
+                getButtonLabel()
               )}
             </button>
           </div>
@@ -136,4 +113,4 @@ const Modal = ({ show, setShow }: IModal) => {
   );
 };
 
-export default Modal;
+export default CreateEditPostModal;

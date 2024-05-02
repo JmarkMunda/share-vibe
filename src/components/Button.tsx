@@ -17,7 +17,7 @@ export default function Button({
   ...props
 }: IButton) {
   const baseStyle =
-    "px-6 py-3 rounded-lg font-bold flex justify-center items-center";
+    "px-6 py-3 rounded-lg font-bold flex justify-center items-center active:scale-105";
   const disabledClass =
     disabled && "bg-gray-100 text-gray-300 cursor-not-allowed";
   const btnVariant =
