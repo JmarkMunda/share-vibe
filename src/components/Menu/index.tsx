@@ -8,7 +8,7 @@ const Menu = ({ items }: IMenu) => {
       <button>
         <HiDotsVertical />
       </button>
-      <ul className="menu menu-sm dropdown-content bg-white shadow w-56 rounded-box z-50">
+      <ul className="menu menu-sm dropdown-content bg-white shadow-md w-56 rounded-box z-50">
         {items.map(({ label, onClick }) => (
           <li key={label}>
             <button onClick={onClick}>{label}</button>

@@ -1,46 +1,53 @@
 "use client";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
-import { AiFillLike } from "react-icons/ai";
-import { FaComment, FaShare } from "react-icons/fa";
-import { deletePost } from "@/app/actions";
-import { IPost } from "./types";
 import moment from "moment";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import toast from "react-hot-toast";
 import CreateEditPostModal from "@/components/CreateEditPostModal";
 import Menu from "@/components/Menu";
 import Avatar from "@/components/Avatar";
+import { AiFillLike } from "react-icons/ai";
+import { FaComment, FaShare } from "react-icons/fa";
+import { deletePost } from "@/app/actions";
+import { IPost } from "./types";
+import { useSession } from "next-auth/react";
 
 const Post = ({ item }: IPost) => {
+  const { data: session } = useSession();
   const [showMenu, setShowMenu] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const isMyPost =
+    session?.user.id === (item.author as Partial<{ _id: string }>)._id;
 
-  const onEditClick = () => {
-    setShowEditModal(true);
-  };
-
-  const onDeleteClick = () => {
-    setShowMenu(true);
-  };
-
+  const onEditClick = () => setShowEditModal(true);
+  const onDeleteClick = () => setShowMenu(true);
   const onReportClick = () => {};
 
-  const menuItems: MenuItemsType[] = [
-    {
-      label: "Edit",
-      onClick: onEditClick,
-    },
-    {
-      label: "Delete",
-      onClick: onDeleteClick,
-    },
-    {
-      label: "Report",
-      onClick: onReportClick,
-    },
-  ];
+  const getMenuItems = () => {
+    let menuItems: MenuItemsType[] = [
+      {
+        label: "Report",
+        onClick: onReportClick,
+      },
+    ];
+
+    if (isMyPost) {
+      menuItems = [
+        {
+          label: "Edit",
+          onClick: onEditClick,
+        },
+        {
+          label: "Delete",
+          onClick: onDeleteClick,
+        },
+        ...menuItems,
+      ];
+    }
+    return menuItems;
+  };
 
   const handleDeletePost = async () => {
     const res = deletePost(item._id);
@@ -67,7 +74,7 @@ const Post = ({ item }: IPost) => {
             </div>
           </div>
           {/* MENU OPTIONS */}
-          <Menu items={menuItems} />
+          <Menu items={getMenuItems()} />
         </div>
         {/* Post itself (caption only, image only , caption with photo) */}
         <div className="flex flex-col mt-4 mb-8 w-full">
