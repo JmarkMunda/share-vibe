@@ -5,6 +5,7 @@ import NavLinks from "./components/NavLinks";
 import MobileMenu from "./components/MobileMenu";
 import { FiSearch } from "react-icons/fi";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 // TODO: User avatar -> in progress
 
@@ -15,7 +16,9 @@ const Navbar = () => {
     <nav className="container bg-primary-300 py-4">
       <div className="flex items-center justify-between">
         <div className="flex_center">
-          <h1 className="mr-2 font-bold">Logo</h1>
+          <Link href="/feed" className="mr-2 font-bold">
+            Logo
+          </Link>
           {/* Search bar */}
           <Searchbar icon={<FiSearch />} placeholder="Search..." />
         </div>
