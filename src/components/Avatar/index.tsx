@@ -5,6 +5,7 @@ const Avatar = ({
   src = "/avatar.png",
   width = 50,
   height = 50,
+  className,
   ...props
 }: IAvatar) => {
   return (
@@ -13,7 +14,7 @@ const Avatar = ({
       alt="avatar"
       width={width}
       height={height}
-      className="rounded-full"
+      className={`rounded-full ${className}`}
       {...props}
     />
   );

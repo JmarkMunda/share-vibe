@@ -3,13 +3,13 @@ import React, { ButtonHTMLAttributes } from "react";
 import { DotLoader } from "react-spinners";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: "primary" | "secondary";
+  variant?: "primary" | "secondary";
   disabled?: boolean;
   loading?: boolean;
 }
 
 export default function Button({
-  variant,
+  variant = "primary",
   disabled,
   loading,
   className,
